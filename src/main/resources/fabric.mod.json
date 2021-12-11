@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "mmocontent",
+  "version": "${version}",
+
+  "name": "MMOContent",
+  "description": "Mod programming utilities for Fabric",
+  "authors": [
+    "DerBerliner",
+    "LCLP"
+  ],
+  "contact": {
+    "homepage": "https://github.com/LCLPYT/MMOContent",
+    "sources": "https://github.com/LCLPYT/MMOContent"
+  },
+
+  "license": "CC BY-NC-SA 3.0 DE",
+  "icon": "assets/mmoquark/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "work.lclpnet.mmoquark.MMOQuark"
+    ],
+    "client": [
+      "work.lclpnet.mmoquark.client.MMOQuarkClient"
+    ]
+  },
+  "mixins": [
+    "mmoquark.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {},
+  "accessWidener": "mmocontent.accesswidener"
+}
