@@ -15,19 +15,19 @@
   },
 
   "license": "CC BY-NC-SA 3.0 DE",
-  "icon": "assets/mmoquark/icon.png",
+  "icon": "assets/mmocontent/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "work.lclpnet.mmoquark.MMOQuark"
+      "work.lclpnet.mmocontent.MMOContent"
     ],
     "client": [
-      "work.lclpnet.mmoquark.client.MMOQuarkClient"
+      "work.lclpnet.mmocontent.client.MMOContentClient"
     ]
   },
   "mixins": [
-    "mmoquark.mixins.json"
+    "mmocontent.mixins.json"
   ],
 
   "depends": {
