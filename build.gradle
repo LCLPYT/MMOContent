@@ -30,6 +30,14 @@ def getVersion() {
 	}
 }
 
+Properties privateProps = new Properties()
+File privatePropsFile = new File(project.projectDir, "private.properties")
+if (privatePropsFile.exists()) {
+	privatePropsFile.withInputStream {
+		privateProps.load(it)
+	}
+}
+
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = project.archives_base_name
@@ -91,11 +99,26 @@ publishing {
 			artifact(sourcesJar) {
 				builtBy remapSourcesJar
 			}
+
+			pom {
+				name = 'MMOContent'
+				description = 'A Minecraft modding library for creating modifications with Fabric.'
+			}
 		}
 	}
 
 	repositories {
-
+		maven {
+			if (privateProps.containsKey('mavenPassword') && privateProps.containsKey('mavenHost') && privateProps.containsKey('mavenUser')) {
+				credentials {
+					username privateProps.getProperty('mavenUser');
+					password privateProps.getProperty('mavenPassword');
+				}
+				url privateProps.getProperty('mavenHost');
+			} else {
+				url "file:///${project.projectDir}/repo"
+			}
+		}
 	}
 }
 
