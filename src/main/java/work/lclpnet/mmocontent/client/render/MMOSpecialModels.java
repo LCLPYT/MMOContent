@@ -1,10 +1,13 @@
 package work.lclpnet.mmocontent.client.render;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Environment(EnvType.CLIENT)
 public class MMOSpecialModels {
 
     private static final Set<Identifier> specialModels = new HashSet<>();
