@@ -15,6 +15,7 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import work.lclpnet.mmocontent.networking.packet.MMOEntitySpawnS2CPacket;
+import work.lclpnet.mmocontent.util.Env;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -35,10 +36,12 @@ public class MMONetworking {
     @Environment(EnvType.CLIENT)
     public static void registerClientPacketHandlers() {
         registrar.registerClientPacketHandlers();
+        registrar = null; // should be called last on client
     }
 
     public static void registerServerPacketHandlers() {
         registrar.registerServerPacketHandlers();
+        if (!Env.isClient()) registrar = null; // not needed any further on a dedicated server
     }
 
     public static void sendPacketTo(MCPacket packet, ServerPlayerEntity player) {

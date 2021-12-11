@@ -17,7 +17,6 @@ public class MMOPacketRegistrar {
 
     private Map<Identifier, IPacketDecoder<? extends MCPacket>> packetDecoderMap = new HashMap<>();
     private final Logger LOGGER;
-    private int handlerRef = 0;
 
     public MMOPacketRegistrar(Logger logger) {
         LOGGER = logger;
@@ -32,8 +31,6 @@ public class MMOPacketRegistrar {
 
     @Environment(EnvType.CLIENT)
     public void registerClientPacketHandlers() {
-        if (wasRegistered()) throw new IllegalStateException("Packets have already been registered");
-
         packetDecoderMap.forEach((id, serializer) -> ClientPlayNetworking.registerGlobalReceiver(id,
                 (client, handler, buf, responseSender) -> {
                     try {
@@ -43,14 +40,10 @@ public class MMOPacketRegistrar {
                     }
                 })
         );
-        handlerRef++;
-        // garbage collect Map object (handlers still remain as global receivers)
-        if (wasRegistered()) packetDecoderMap = null;
+        packetDecoderMap = null; // registerClient should be called last
     }
 
     public void registerServerPacketHandlers() {
-        if (wasRegistered()) throw new IllegalStateException("Packets have already been registered");
-
         packetDecoderMap.forEach((id, serializer) -> ServerPlayNetworking.registerGlobalReceiver(id,
                 (server, player, handler, buf, responseSender) -> {
                     try {
@@ -60,13 +53,5 @@ public class MMOPacketRegistrar {
                     }
                 })
         );
-
-        handlerRef++;
-        // garbage collect Map object (handlers still remain as global receivers)
-        if (wasRegistered()) packetDecoderMap = null;
-    }
-
-    public boolean wasRegistered() {
-        return handlerRef >= (Env.isClient() ? 2 : 1); // client has two register calls (client + server)
     }
 }

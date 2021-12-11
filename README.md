@@ -46,10 +46,12 @@ public class MCNetworking {
     @Environment(EnvType.CLIENT)
     public static void registerClientPacketHandlers() {
         registrar.registerClientPacketHandlers();
+        registrar = null; // should be called last on client
     }
 
     public static void registerServerPacketHandlers() {
         registrar.registerServerPacketHandlers();
+        if (!Env.isClient()) registrar = null; // not needed any further on a dedicated server
     }
 } 
 ```
