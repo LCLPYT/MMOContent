@@ -31,11 +31,8 @@ public class MMOVerticalSlabBlock extends MMOBlock implements Waterloggable {
     public static final EnumProperty<VerticalSlabType> TYPE = EnumProperty.of("type", VerticalSlabType.class);
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
-//    public final Block parent;
-
     public MMOVerticalSlabBlock(Block parent) {
         super(Settings.copy(parent));
-//        this.parent = parent;
 
         if(!(parent instanceof SlabBlock)) throw new IllegalArgumentException("Can't rotate a non-slab block into a vertical slab.");
 

@@ -4,6 +4,7 @@
   "package": "work.lclpnet.mmocontent.asm.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
+    "client.MixinArmorFeatureRenderer",
     "client.MixinBlockColors",
     "client.MixinBuiltinModelItemRenderer",
     "client.MixinClientPlayNetworkHandler",
@@ -15,6 +16,7 @@
   },
   "mixins": [
     "common.AbstractButtonBlockAccessor",
+    "common.MixinAbstractButtonBlock",
     "common.SoundEventAccessor"
   ]
 }
