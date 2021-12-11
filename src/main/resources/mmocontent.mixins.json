@@ -5,15 +5,16 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "client.MixinBlockColors",
+    "client.MixinBuiltinModelItemRenderer",
     "client.MixinClientPlayNetworkHandler",
     "client.MixinItemColors",
-    "client.MixinModelLoader",
-    "client.MixinBuiltinModelItemRenderer"
+    "client.MixinModelLoader"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "common.AbstractButtonBlockAccessor"
+    "common.AbstractButtonBlockAccessor",
+    "common.SoundEventAccessor"
   ]
 }
