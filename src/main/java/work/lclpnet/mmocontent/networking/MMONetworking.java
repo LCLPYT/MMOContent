@@ -23,14 +23,13 @@ import java.util.Objects;
 public class MMONetworking {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static MMOPacketRegistrar registrar = new MMOPacketRegistrar(LOGGER);
+    private static MMOPacketRegistrar registrar = null;
 
     public static void registerPackets() {
-        if (registrar == null) return; // already registered
+        if (registrar != null) return; // already registered
 
+        registrar = new MMOPacketRegistrar(LOGGER);
         registrar.register(MMOEntitySpawnS2CPacket.ID, new MMOEntitySpawnS2CPacket.Decoder());
-
-        registrar = null;
     }
 
     @Environment(EnvType.CLIENT)

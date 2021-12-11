@@ -7,15 +7,14 @@ Create a handler class called something like `MCNetworking` (customized for your
 Define the following field / methods:
 ```java
 public class MCNetworking {
-    private static MMOPacketRegistrar registrar = new MMOPacketRegistrar(LogManager.getLogger());
+    private static MMOPacketRegistrar registrar = null;
     
     public static void registerPackets() {
-        if (registrar == null) return; // already registered
-        
+        if (registrar != null) return; // already registered
+
+        registrar = new MMOPacketRegistrar(LogManager.getLogger());
         // register your packets here
         // registrar.register(MMOEntitySpawnS2CPacket.ID, new MMOEntitySpawnS2CPacket.Decoder());
-
-        registrar = null;
     }
 
     @Environment(EnvType.CLIENT)
