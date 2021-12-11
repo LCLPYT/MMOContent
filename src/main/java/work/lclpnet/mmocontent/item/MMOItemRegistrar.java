@@ -28,14 +28,13 @@ public class MMOItemRegistrar {
         this.itemFactory = itemFactory;
     }
 
-    public void register(String name, IdentifierProvider identifierProvider) {
-        register(name, ItemGroup.BUILDING_BLOCKS, identifierProvider);
+    public void register(Identifier itemId) {
+        register(itemId, ItemGroup.BUILDING_BLOCKS);
     }
 
-    public void register(String name, ItemGroup group, IdentifierProvider identifierProvider) {
-        final Identifier blockId = identifierProvider.identifier(name);
+    public void register(final Identifier itemId, ItemGroup group) {
         final Item item = itemFactory.apply(new FabricItemSettings().group(group));
-        Registry.register(Registry.ITEM, blockId, item);
+        Registry.register(Registry.ITEM, itemId, item);
 
         if (Env.isClient() && item instanceof IItemColorProvider) registerItemColor((IItemColorProvider) item);
     }
@@ -47,6 +46,6 @@ public class MMOItemRegistrar {
 
     public static void registerSpawnEgg(EntityType<?> type, String entityName, int primaryColor, int secondaryColor, IdentifierProvider identifierProvider) {
         new MMOItemRegistrar(settings -> new SpawnEggItem(type, primaryColor, secondaryColor, settings))
-                .register(String.format("%s_spawn_egg", entityName), ItemGroup.MISC, identifierProvider);
+                .register(identifierProvider.identifier(String.format("%s_spawn_egg", entityName)), ItemGroup.MISC);
     }
 }

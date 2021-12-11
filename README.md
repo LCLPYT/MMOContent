@@ -2,6 +2,32 @@
 MMOContent is a Minecraft modification programming library.
 
 ## Implementation
+### Gradle Dependency
+In your `build.gradle` build script, add this repository and dependency:
+```groovy
+repositories {
+    maven {
+        url "https://repo.lclpnet.work/repository/internal"
+    }
+    // other repositories here
+}
+
+dependencies {
+    modImplementation "work.lclpnet.mods:mmocontent:${project.mmocontent_version}" // replace with version
+}
+```
+
+### `fabric.mod.json` Dependency
+In your `fabric.mod.json`, add MMOContent as dependency:
+```json
+  // ...
+  "depends": {
+    "mmocontent": ">=1.0.0" // replace with desired version (semver enabled)
+  },
+  // ...
+```
+
+
 ### Networking / Packets
 Create a handler class called something like `MCNetworking` (customized for your mod).
 Define the following field / methods:
