@@ -19,7 +19,7 @@ dependencies {
 
 ### `fabric.mod.json` Dependency
 In your `fabric.mod.json`, add MMOContent as dependency:
-```json
+```jsonc
   // ...
   "depends": {
     "mmocontent": ">=1.0.0" // replace with desired version (semver enabled)
