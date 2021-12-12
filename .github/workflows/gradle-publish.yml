@@ -22,7 +22,7 @@ jobs:
     - name: Publish to Repository
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: publish
+        arguments: 'publish --stacktrace'
       env:
         DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
