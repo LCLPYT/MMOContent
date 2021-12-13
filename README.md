@@ -1,4 +1,7 @@
 # MMOContent
+
+[![Gradle Publish](https://github.com/LCLPYT/MMOContent/actions/workflows/gradle-publish.yml/badge.svg)](https://github.com/LCLPYT/MMOContent/actions/workflows/gradle-publish.yml)
+
 MMOContent is a Minecraft modification programming library.
 
 ## Implementation
