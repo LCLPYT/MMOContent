@@ -84,7 +84,7 @@ java {
 }
 
 jar {
-	from("LICENSE") {
+	from("LICENSE.md") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
 }
@@ -119,7 +119,7 @@ publishing {
 				}
 				url env.get("DEPLOY_URL")
 			}
-			else if (privateProps.containsKey('mavenPassword') && privateProps.containsKey('mavenHost') && privateProps.containsKey('mavenUser')) {
+			else if (Arrays.stream("mavenHost", "mavenUser", "mavenPassword").allMatch(privateProps.&containsKey)) {
 				credentials {
 					username privateProps.getProperty('mavenUser')
 					password privateProps.getProperty('mavenPassword')
