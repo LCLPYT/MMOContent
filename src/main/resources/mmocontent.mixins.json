@@ -4,6 +4,7 @@
   "package": "work.lclpnet.mmocontent.asm.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
+    "client.MinecraftClientAccessor",
     "client.MixinArmorFeatureRenderer",
     "client.MixinBuiltinModelItemRenderer",
     "client.MixinClientPlayNetworkHandler",
