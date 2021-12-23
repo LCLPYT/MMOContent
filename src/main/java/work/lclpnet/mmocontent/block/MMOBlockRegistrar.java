@@ -8,6 +8,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import work.lclpnet.mmocontent.block.ext.*;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNullableByDefault;
 import java.util.Objects;
 
 public class MMOBlockRegistrar {
@@ -61,48 +63,68 @@ public class MMOBlockRegistrar {
         BlockItem item = block instanceof IMMOBlock ? ((IMMOBlock) block).provideBlockItem(blockItemSettings) : new BlockItem(block, blockItemSettings);
         if (item != null) registerBlockItem(blockId, item);
 
-        SlabBlock slabBlock = null;
-        MMOVerticalSlabBlock verticalSlabBlock = null;
+        RegisteredBlock<SlabBlock> registeredSlab = null;
+        RegisteredBlock<MMOVerticalSlabBlock> registeredVerticalSlab = null;
         if (slab || verticalSlab) {
-            slabBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideSlab(block) : new MMOSlabBlock(block);
+            SlabBlock slabBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideSlab(block) : new MMOSlabBlock(block);
             if (slab) {
                 final Identifier slabId = new Identifier(namespace, String.format("%s_slab", name));
                 registerBlock(slabId, slabBlock);
-                registerBlockItem(slabId, new BlockItem(slabBlock, new FabricItemSettings().group(group)));
+
+                BlockItem slabItem = new BlockItem(slabBlock, new FabricItemSettings().group(group));
+                registerBlockItem(slabId, slabItem);
+
+                registeredSlab = new RegisteredBlock<>(slabBlock, slabItem);
             }
             if (verticalSlab) {
                 final Identifier verticalSlabId = new Identifier(namespace, name + "_vertical_slab");
-                verticalSlabBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideVerticalSlab(slabBlock) : new MMOVerticalSlabBlock(slabBlock);
+                MMOVerticalSlabBlock verticalSlabBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideVerticalSlab(slabBlock) : new MMOVerticalSlabBlock(slabBlock);
                 registerBlock(verticalSlabId, verticalSlabBlock);
-                registerBlockItem(verticalSlabId, new BlockItem(verticalSlabBlock, new FabricItemSettings().group(group)));
+
+                BlockItem verticalSlabItem = new BlockItem(verticalSlabBlock, new FabricItemSettings().group(group));
+                registerBlockItem(verticalSlabId, verticalSlabItem);
+
+                registeredVerticalSlab = new RegisteredBlock<>(verticalSlabBlock, verticalSlabItem);
             }
         }
 
-        StairsBlock stairsBlock = null;
+        RegisteredBlock<StairsBlock> registeredStairs = null;
         if (stairs) {
             final Identifier stairsId = new Identifier(namespace, String.format("%s_stairs", name));
-            stairsBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideStairs(block) : new MMOStairsBlock(block);
+            StairsBlock stairsBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideStairs(block) : new MMOStairsBlock(block);
             registerBlock(stairsId, stairsBlock);
-            registerBlockItem(stairsId, new BlockItem(stairsBlock, new FabricItemSettings().group(group)));
+
+            BlockItem stairsItem = new BlockItem(stairsBlock, new FabricItemSettings().group(group));
+            registerBlockItem(stairsId, stairsItem);
+
+            registeredStairs = new RegisteredBlock<>(stairsBlock, stairsItem);
         }
 
-        WallBlock wallBlock = null;
+        RegisteredBlock<WallBlock> registeredWall = null;
         if (wall) {
             final Identifier wallId = new Identifier(namespace, String.format("%s_wall", name));
-            wallBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideWall(block) : new MMOWallBlock(block);
+            WallBlock wallBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideWall(block) : new MMOWallBlock(block);
             registerBlock(wallId, wallBlock);
-            registerBlockItem(wallId, new BlockItem(wallBlock, new FabricItemSettings().group(ItemGroup.DECORATIONS)));
+
+            BlockItem wallItem = new BlockItem(wallBlock, new FabricItemSettings().group(ItemGroup.DECORATIONS));
+            registerBlockItem(wallId, wallItem);
+
+            registeredWall = new RegisteredBlock<>(wallBlock, wallItem);
         }
 
-        PaneBlock paneBlock = null;
+        RegisteredBlock<PaneBlock> registeredPane = null;
         if (pane) {
             final Identifier paneId = new Identifier(namespace, String.format("%s_pane", name));
-            paneBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).providePane(block) : new MMOInheritedPaneBlock(block);
+            PaneBlock paneBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).providePane(block) : new MMOInheritedPaneBlock(block);
             registerBlock(paneId, paneBlock);
-            registerBlockItem(paneId, new BlockItem(paneBlock, new FabricItemSettings().group(ItemGroup.DECORATIONS)));
+
+            BlockItem paneItem = new BlockItem(paneBlock, new FabricItemSettings().group(ItemGroup.DECORATIONS));
+            registerBlockItem(paneId, paneItem);
+
+            registeredPane = new RegisteredBlock<>(paneBlock, paneItem);
         }
 
-        return new Result(item, slabBlock, verticalSlabBlock, stairsBlock, wallBlock, paneBlock);
+        return new Result(item, registeredSlab, registeredVerticalSlab, registeredStairs, registeredWall, registeredPane);
     }
 
     private void registerBlockItem(Identifier blockId, BlockItem blockItem) {
@@ -115,20 +137,44 @@ public class MMOBlockRegistrar {
 
     public static class Result {
 
+        @Nullable
         public final BlockItem item;
-        public final SlabBlock slab;
-        public final MMOVerticalSlabBlock verticalSlab;
-        public final StairsBlock stairs;
-        public final WallBlock wall;
-        public final PaneBlock pane;
+        @Nullable
+        public final RegisteredBlock<SlabBlock> slab;
+        @Nullable
+        public final RegisteredBlock<MMOVerticalSlabBlock> verticalSlab;
+        @Nullable
+        public final RegisteredBlock<StairsBlock> stairs;
+        @Nullable
+        public final RegisteredBlock<WallBlock> wall;
+        @Nullable
+        public final RegisteredBlock<PaneBlock> pane;
 
-        public Result(BlockItem item, SlabBlock slab, MMOVerticalSlabBlock verticalSlab, StairsBlock stairs, WallBlock wall, PaneBlock pane) {
+        @ParametersAreNullableByDefault
+        public Result(BlockItem item,
+                      RegisteredBlock<SlabBlock> slab,
+                      RegisteredBlock<MMOVerticalSlabBlock> verticalSlab,
+                      RegisteredBlock<StairsBlock> stairs,
+                      RegisteredBlock<WallBlock> wall,
+                      RegisteredBlock<PaneBlock> pane) {
             this.item = item;
             this.slab = slab;
             this.verticalSlab = verticalSlab;
             this.stairs = stairs;
             this.wall = wall;
             this.pane = pane;
+        }
+    }
+
+    public static class RegisteredBlock<T extends Block> {
+
+        public final T block;
+        @Nullable
+        public final BlockItem item;
+
+        public RegisteredBlock(T block, @Nullable BlockItem item) {
+            this.block = block;
+            this.item = item;
         }
     }
 }
