@@ -23,17 +23,18 @@ public class MMOItemRegistrar {
         this.itemFactory = itemFactory;
     }
 
-    public void register(Identifier itemId) {
-        register(itemId, ItemGroup.BUILDING_BLOCKS);
+    public Item register(Identifier itemId) {
+        return register(itemId, ItemGroup.BUILDING_BLOCKS);
     }
 
-    public void register(final Identifier itemId, ItemGroup group) {
+    public Item register(final Identifier itemId, ItemGroup group) {
         final Item item = itemFactory.apply(new FabricItemSettings().group(group));
         Registry.register(Registry.ITEM, itemId, item);
+        return item;
     }
 
-    public static void registerSpawnEgg(EntityType<?> type, String entityName, int primaryColor, int secondaryColor, IdentifierProvider identifierProvider) {
-        new MMOItemRegistrar(settings -> new SpawnEggItem(type, primaryColor, secondaryColor, settings))
+    public static SpawnEggItem registerSpawnEgg(EntityType<?> type, String entityName, int primaryColor, int secondaryColor, IdentifierProvider identifierProvider) {
+        return (SpawnEggItem) new MMOItemRegistrar(settings -> new SpawnEggItem(type, primaryColor, secondaryColor, settings))
                 .register(identifierProvider.identifier(String.format("%s_spawn_egg", entityName)), ItemGroup.MISC);
     }
 }
