@@ -8,7 +8,8 @@
     "client.MixinArmorFeatureRenderer",
     "client.MixinBuiltinModelItemRenderer",
     "client.MixinClientPlayNetworkHandler",
-    "client.MixinModelLoader"
+    "client.MixinModelLoader",
+    "client.MixinRenderLayers"
   ],
   "injectors": {
     "defaultRequire": 1
