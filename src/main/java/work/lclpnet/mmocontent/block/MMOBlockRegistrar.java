@@ -1,19 +1,12 @@
 package work.lclpnet.mmocontent.block;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.*;
-import net.minecraft.client.color.block.BlockColorProvider;
-import net.minecraft.client.color.item.ItemColorProvider;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import work.lclpnet.mmocontent.block.ext.*;
-import work.lclpnet.mmocontent.client.render.block.MMOBlockColors;
-import work.lclpnet.mmocontent.util.Env;
 
 import java.util.Objects;
 
@@ -104,23 +97,9 @@ public class MMOBlockRegistrar {
 
     private void registerBlockItem(Identifier blockId, BlockItem blockItem) {
         Registry.register(Registry.ITEM, blockId, blockItem);
-        if (Env.isClient()) registerItemColor(blockItem.getBlock(), blockItem);
     }
 
     private void registerBlock(Identifier identifier, Block block) {
         Registry.register(Registry.BLOCK, identifier, block);
-        if (Env.isClient()) registerBlockColor(block);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private void registerItemColor(Block block, ItemConvertible... items) {
-        if (block instanceof ItemColorProvider)
-            MMOBlockColors.registerItemColor((ItemColorProvider) block, items);
-    }
-
-    @Environment(EnvType.CLIENT)
-    private void registerBlockColor(Block block) {
-        if (block instanceof BlockColorProvider)
-            MMOBlockColors.registerBlockColor((BlockColorProvider) block, block);
     }
 }
