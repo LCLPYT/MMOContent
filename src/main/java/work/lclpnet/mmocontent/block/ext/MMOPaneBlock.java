@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 
 public class MMOPaneBlock extends PaneBlock implements IMMOBlock {
 
-    protected MMOPaneBlock(Settings settings) {
+    public MMOPaneBlock(Settings settings) {
         super(settings);
     }
 
