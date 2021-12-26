@@ -24,7 +24,7 @@ dependencies {
 }
 
 loom {
-	accessWidener = file("src/main/resources/mmocontent.accesswidener")
+	accessWidenerPath = file("src/main/resources/mmocontent.accesswidener")
 }
 
 processResources {
