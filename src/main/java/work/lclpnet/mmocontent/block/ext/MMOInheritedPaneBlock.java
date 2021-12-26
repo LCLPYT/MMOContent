@@ -8,7 +8,7 @@ import work.lclpnet.mmocontent.util.Env;
 public class MMOInheritedPaneBlock extends MMOPaneBlock {
 
     public MMOInheritedPaneBlock(Block parent) {
-        super(BlockStatesUtil.copyState(parent), false);
+        super(BlockStatesUtil.copyState(parent));
 
         if (Env.isClient()) MMORenderLayers.inheritRenderLayer(this, parent);
     }

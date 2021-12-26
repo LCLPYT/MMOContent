@@ -1,18 +1,13 @@
 package work.lclpnet.mmocontent.block.ext;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.VineBlock;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.BlockPos;
-import work.lclpnet.mmocontent.client.render.block.MMORenderLayers;
-import work.lclpnet.mmocontent.util.Env;
 
 import java.util.Random;
 
@@ -24,13 +19,6 @@ public class MMOVineBlock extends VineBlock implements IMMOBlock {
                 .ticksRandomly()
                 .strength(0.2F, 0.2F)
                 .sounds(BlockSoundGroup.GRASS));
-
-        if (Env.isClient()) registerRenderLayer();
-    }
-
-    @Environment(EnvType.CLIENT)
-    protected void registerRenderLayer() {
-        MMORenderLayers.setBlockRenderType(this, RenderLayer.getCutout());
     }
 
     @Override

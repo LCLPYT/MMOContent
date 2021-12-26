@@ -22,6 +22,6 @@ public interface IBlockOverride {
     }
 
     default PaneBlock providePane(Block baseBlock) {
-        return new MMOPaneBlock(BlockStatesUtil.copyState(baseBlock), true);
+        return new MMOPaneBlock(BlockStatesUtil.copyState(baseBlock));
     }
 }
