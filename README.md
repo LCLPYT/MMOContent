@@ -114,3 +114,56 @@ Remember to call the `init()` method inside your common entry:
         MMOSounds.init();
     }
 ```
+
+### Blocks
+MMOContent provides a comfort `MMOBlockRegistrar` class for registering blocks.
+
+To create a new stone-like block with slab and stairs variants, use the following code in your mod's common initializer:
+```java
+MMOBlock block = new MMOBlock(AbstractBlock.Settings.of(Material.STONE).sounds(BlockSoundGroup.STONE));
+new MMOBlockRegistrar(block)
+        .withSlab().withStairs()
+        .register(new Identifier("modid", "custom_stone"));
+```
+As you can see, `MMOBlockRegistrar` uses a builder-like pattern to collect all variants to register.
+There are a lot of variants you can add; view them all in your IDE.
+
+In this example, `MMOBlock` is used as block instance, but you are free to use any descendant of `net.minecraft.block.Block`.
+There is even a constructor that allows you to pass an instance of `net.minecraft.block.AbstractBlock.Settings` directly.
+For more information on `Settings`, consult the [Fabric wiki](https://fabricmc.net/wiki/tutorial:blocks#registering_your_block).
+
+#### Vertical Slabs
+If you want to add vertical slabs to your blocks, you can use `MMOBlockRegistrar::withVerticalSlab` to add one from the builder.
+In case you want to register a vertical slab block without a builder, you can instantiate `MMOVerticalSlabBlock` directly, passing an instance of `net.minecraft.block.SlabBlock` from with the vertical slab will be derived.
+
+After registering the block, you must create a blockstate and two model files:
+```jsonc
+// blockstates/custom_stone_vertical_slab.json
+{
+  "variants": {
+    "type=north": { "model": "modid:block/custom_stone_vertical_slab", "y": 0, "uvlock": true },
+    "type=south": { "model": "modid:block/custom_stone_vertical_slab", "y": 180, "uvlock": true },
+    "type=east": { "model": "modid:block/custom_stone_vertical_slab", "y": 90, "uvlock": true },
+    "type=west": { "model": "modid:block/custom_stone_vertical_slab", "y": 270, "uvlock": true },
+    "type=double": { "model": "modid:block/custom_stone" }
+  }
+}
+
+// model/block/custom_stone_vertical_slab.json
+{
+  "parent": "modid:block/vertical_slab",
+  "textures": {
+    "bottom": "modid:block/custom_stone",
+    "top": "modid:block/custom_stone",
+    "side": "modid:block/custom_stone"
+  }
+}
+
+// model/item/custom_stone_vertical_slab.json
+{
+    "parent": "modid:block/custom_stone_vertical_slab"
+}
+```
+Where `modid` is the id of your mod, and `custom_stone` is your block name.
+The parent model `modid:block/vertical_slab` has to created too, but you can copy it [directly from MMOContent](https://github.com/LCLPYT/MMOContent/blob/main/src/main/resources/assets/mmocontent/model/block/vertical_slab.json) (put it in your `model/block` directory).<br>
+Referencing it directly (`"parent": "mmocontent:block/vertical_slab"`) is a bad idea, since it is not guaranteed that MMOContent is loaded before your mod, which can lead to errors.
