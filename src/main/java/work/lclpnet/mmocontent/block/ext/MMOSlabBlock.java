@@ -9,7 +9,11 @@ import work.lclpnet.mmocontent.block.BlockStatesUtil;
 public class MMOSlabBlock extends SlabBlock implements IMMOBlock {
 
     public MMOSlabBlock(Block parent) {
-        super(BlockStatesUtil.copyState(parent));
+        this(BlockStatesUtil.copyState(parent));
+    }
+
+    public MMOSlabBlock(Settings settings) {
+        super(settings);
     }
 
     @Override

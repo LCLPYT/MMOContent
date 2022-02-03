@@ -9,7 +9,11 @@ import work.lclpnet.mmocontent.block.BlockStatesUtil;
 public class MMOWallBlock extends WallBlock implements IMMOBlock {
 
     public MMOWallBlock(Block parent) {
-        super(BlockStatesUtil.copyState(parent));
+        this(BlockStatesUtil.copyState(parent));
+    }
+
+    public MMOWallBlock(Settings settings) {
+        super(settings);
     }
 
     @Override
