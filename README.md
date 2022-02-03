@@ -4,6 +4,11 @@
 
 MMOContent is a Minecraft modification programming library.
 
+## Download
+Stable builds of MMOContent are available at the [GitHub Releases tab](https://github.com/LCLPYT/MMOContent/releases).
+
+However, you can find all versions of the mod in the [LCLPNetwork Artifactory](https://repo.lclpnet.work/#artifact~internal/work.lclpnet.mods/mmocontent).
+
 ## Implementation
 ### Gradle Dependency
 In your `build.gradle` build script, add this repository and dependency:
