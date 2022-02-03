@@ -1,5 +1,6 @@
 package work.lclpnet.mmocontent.block;
 
+import com.google.common.base.Functions;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
@@ -11,6 +12,7 @@ import work.lclpnet.mmocontent.block.ext.*;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class MMOBlockRegistrar {
 
@@ -55,13 +57,28 @@ public class MMOBlockRegistrar {
     }
 
     public Result register(final Identifier blockId, ItemGroup group) {
+        return register(blockId, group, Functions.identity());
+    }
+
+    /**
+     * Registers every block variant set by this builder.
+     *
+     * @param blockId The identifier of the base block to register, variant names will be derived from it.
+     * @param group The {@link ItemGroup} to register items to.
+     * @param basePathTransformer A function that transforms the <code>blockId</code> for the base block. Useful, for example,
+     *                            if one want's to register planks and matching stairs, etc. one would set <code>blockId</code> to
+     *                            <code>"woodname"</code> and the basePathTransformer to <code>id -> id + "_planks"</code>.
+     *                            This way, the stairs would be named consistently: <code>"woodname_stairs"</code>.
+     * @return The result, containing all registered variants.
+     */
+    public Result register(final Identifier blockId, ItemGroup group, Function<String, String> basePathTransformer) {
         registerBlock(blockId, block);
 
         final String namespace = blockId.getNamespace(), name = blockId.getPath();
 
         final FabricItemSettings blockItemSettings = new FabricItemSettings().group(group);
         BlockItem item = block instanceof IMMOBlock ? ((IMMOBlock) block).provideBlockItem(blockItemSettings) : new BlockItem(block, blockItemSettings);
-        if (item != null) registerBlockItem(blockId, item);
+        if (item != null) registerBlockItem(new Identifier(namespace, basePathTransformer.apply(name)), item);
 
         RegisteredBlock<SlabBlock> registeredSlab = null;
         RegisteredBlock<MMOVerticalSlabBlock> registeredVerticalSlab = null;
@@ -77,7 +94,7 @@ public class MMOBlockRegistrar {
                 registeredSlab = new RegisteredBlock<>(slabBlock, slabItem);
             }
             if (verticalSlab) {
-                final Identifier verticalSlabId = new Identifier(namespace, name + "_vertical_slab");
+                final Identifier verticalSlabId = new Identifier(namespace, String.format("%s_vertical_slab", name));
                 MMOVerticalSlabBlock verticalSlabBlock = block instanceof IBlockOverride ? ((IBlockOverride) block).provideVerticalSlab(slabBlock) : new MMOVerticalSlabBlock(slabBlock);
                 registerBlock(verticalSlabId, verticalSlabBlock);
 
