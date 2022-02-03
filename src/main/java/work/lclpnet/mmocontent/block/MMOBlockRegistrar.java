@@ -120,13 +120,14 @@ public class MMOBlockRegistrar {
      * @return The result, containing all registered variants.
      */
     public Result register(final Identifier blockId, ItemGroup group, Function<String, String> basePathTransformer) {
-        registerBlock(blockId, block);
-
         final String namespace = blockId.getNamespace(), name = blockId.getPath();
+
+        Identifier baseBlockId = new Identifier(namespace, basePathTransformer.apply(name));
+        registerBlock(baseBlockId, block);
 
         final FabricItemSettings blockItemSettings = new FabricItemSettings().group(group);
         BlockItem item = block instanceof IMMOBlock ? ((IMMOBlock) block).provideBlockItem(blockItemSettings) : new BlockItem(block, blockItemSettings);
-        if (item != null) registerBlockItem(new Identifier(namespace, basePathTransformer.apply(name)), item);
+        if (item != null) registerBlockItem(baseBlockId, item);
 
         final IBlockOverride provider = block instanceof IBlockOverride ? (IBlockOverride) block : DEFAULT_PROVIDER;
 

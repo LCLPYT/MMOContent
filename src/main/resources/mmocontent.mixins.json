@@ -17,6 +17,7 @@
   "mixins": [
     "common.AbstractButtonBlockAccessor",
     "common.MixinAbstractButtonBlock",
+    "common.MixinAxeItem",
     "common.SoundEventAccessor"
   ]
 }
