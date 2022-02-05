@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
@@ -51,9 +50,7 @@ public class MMOEntitySpawnS2CPacket extends MCPacket implements IClientPacketHa
 
     @Override
     public void handleClient(MinecraftClient client, ClientPlayNetworkHandler handler, PacketSender sender) {
-        ClientWorld world = handler.getWorld();
-
-        client.execute(() -> MMOClientEntities.spawnEntity(this.originalPacket, world, entity -> {
+        client.execute(() -> MMOClientEntities.spawnEntity(this.originalPacket, handler.getWorld(), entity -> {
             if (entity instanceof AdditionalSpawnData && this.additionalData != null)
                 ((AdditionalSpawnData) entity).readSpawnData(this.additionalData);
         }));
