@@ -130,7 +130,9 @@ public class MMOVerticalSlabBlock extends MMOBlock implements Waterloggable {
     @Override
     @SuppressWarnings("deprecation")
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom) {
-        if(state.get(WATERLOGGED)) world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        if (state.get(WATERLOGGED)) {
+            world.createAndScheduleBlockTick(pos, this, Fluids.WATER.getTickRate(world));
+        }
         return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
     }
 

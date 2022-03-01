@@ -59,9 +59,8 @@ public class MMOEntitySpawnS2CPacket extends MCPacket implements IClientPacketHa
     public static class Decoder implements IPacketDecoder<MMOEntitySpawnS2CPacket> {
 
         @Override
-        public MMOEntitySpawnS2CPacket decode(PacketByteBuf buffer) throws IOException {
-            EntitySpawnS2CPacket originalPacket = new EntitySpawnS2CPacket();
-            originalPacket.read(buffer);
+        public MMOEntitySpawnS2CPacket decode(PacketByteBuf buffer) {
+            EntitySpawnS2CPacket originalPacket = new EntitySpawnS2CPacket(buffer);
 
             PacketByteBuf additionalData = null;
             if (buffer.readableBytes() > 0) additionalData = PacketByteBufs.copy(buffer.retainedSlice());

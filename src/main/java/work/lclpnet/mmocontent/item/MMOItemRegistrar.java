@@ -2,6 +2,7 @@ package work.lclpnet.mmocontent.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
@@ -33,7 +34,7 @@ public class MMOItemRegistrar {
         return item;
     }
 
-    public static SpawnEggItem registerSpawnEgg(EntityType<?> type, String entityName, int primaryColor, int secondaryColor, IdentifierProvider identifierProvider) {
+    public static SpawnEggItem registerSpawnEgg(EntityType<? extends MobEntity> type, String entityName, int primaryColor, int secondaryColor, IdentifierProvider identifierProvider) {
         return (SpawnEggItem) new MMOItemRegistrar(settings -> new SpawnEggItem(type, primaryColor, secondaryColor, settings))
                 .register(identifierProvider.identifier(String.format("%s_spawn_egg", entityName)), ItemGroup.MISC);
     }

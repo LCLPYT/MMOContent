@@ -4,8 +4,9 @@
 build/
 out/
 classes/
-private.properties
+publish.properties
 repo/
+remappedSrc/
 
 # eclipse
 

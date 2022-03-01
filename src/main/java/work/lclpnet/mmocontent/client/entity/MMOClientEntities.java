@@ -43,9 +43,9 @@ public class MMOClientEntities {
         int i = packet.getId();
         entity.updateTrackedPosition(x, y, z);
         entity.refreshPositionAfterTeleport(x, y, z);
-        entity.pitch = (float)(packet.getPitch() * 360) / 256.0F;
-        entity.yaw = (float)(packet.getYaw() * 360) / 256.0F;
-        entity.setEntityId(i);
+        entity.setPitch((float)(packet.getPitch() * 360) / 256.0F);
+        entity.setYaw((float)(packet.getYaw() * 360) / 256.0F);
+        entity.setId(i);
         entity.setUuid(packet.getUuid());
         if (transformer != null) transformer.accept(entity);
         world.addEntity(i, entity);

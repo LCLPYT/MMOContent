@@ -7,7 +7,9 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,6 +17,8 @@ import work.lclpnet.mmocontent.client.item.MMOBlockEntityItem;
 
 @Mixin(BuiltinModelItemRenderer.class)
 public class MixinBuiltinModelItemRenderer {
+
+    @Shadow @Final private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
 
     @Inject(
             method = "render(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V",
@@ -32,7 +36,7 @@ public class MixinBuiltinModelItemRenderer {
         MMOBlockEntityItem mmoItem = (MMOBlockEntityItem) item;
 
         mmoItem.beforeRender();
-        BlockEntityRenderDispatcher.INSTANCE.renderEntity(mmoItem.getEntity(), matrices, vertexConsumers, light, overlay);
+        blockEntityRenderDispatcher.renderEntity(mmoItem.getEntity(), matrices, vertexConsumers, light, overlay);
         mmoItem.afterRender();
 
         ci.cancel();

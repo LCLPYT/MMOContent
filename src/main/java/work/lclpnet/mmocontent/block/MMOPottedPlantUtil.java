@@ -16,7 +16,7 @@ public class MMOPottedPlantUtil {
     }
 
     public static FlowerPotBlock addPottedPlant(Block block, String name, Function<AbstractBlock.Settings, AbstractBlock.Settings> transformer, IdentifierProvider identifierProvider) {
-        AbstractBlock.Settings settings = transformer.apply(AbstractBlock.Settings.of(Material.SUPPORTED)
+        AbstractBlock.Settings settings = transformer.apply(AbstractBlock.Settings.of(Material.DECORATION)
                 .breakInstantly()
                 .nonOpaque());
 
