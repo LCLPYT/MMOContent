@@ -120,14 +120,39 @@ public class MMOBlockRegistrar {
      * @return The result, containing all registered variants.
      */
     public Result register(final Identifier blockId, ItemGroup group, Function<String, String> basePathTransformer) {
+        return register(blockId, group, basePathTransformer, true);
+    }
+
+    /**
+     * Registers every block variant set by this builder.
+     *
+     * @param blockId The identifier of the base block to register, variant names will be derived from it.
+     * @param group The {@link ItemGroup} to register items to.
+     * @param basePathTransformer A function that transforms the <code>blockId</code> for the base block. Useful, for example,
+     *                            if one want's to register planks and matching stairs, etc. one would set <code>blockId</code> to
+     *                            <code>"woodname"</code> and the basePathTransformer to <code>id -> id + "_planks"</code>.
+     *                            This way, the stairs would be named consistently: <code>"woodname_stairs"</code>.
+     * @param registerBase Whether to register the base block. If false, only the variants will be registered.
+     *                     This feature is especially useful when trying to add stairs/slabs to vanilla blocks.
+     * @return The result, containing all registered variants.
+     */
+    public Result register(final Identifier blockId, ItemGroup group, Function<String, String> basePathTransformer, boolean registerBase) {
         final String namespace = blockId.getNamespace(), name = blockId.getPath();
 
         Identifier baseBlockId = new Identifier(namespace, basePathTransformer.apply(name));
-        registerBlock(baseBlockId, block);
+        if (registerBase)
+            registerBlock(baseBlockId, block);
 
-        final FabricItemSettings blockItemSettings = new FabricItemSettings().group(group);
-        BlockItem item = block instanceof IMMOBlock ? ((IMMOBlock) block).provideBlockItem(blockItemSettings) : new BlockItem(block, blockItemSettings);
-        if (item != null) registerBlockItem(baseBlockId, item);
+        final BlockItem item;
+
+        if (registerBase) {
+            final FabricItemSettings blockItemSettings = new FabricItemSettings().group(group);
+            item = block instanceof IMMOBlock ? ((IMMOBlock) block).provideBlockItem(blockItemSettings) : new BlockItem(block, blockItemSettings);
+            if (item != null)
+                registerBlockItem(baseBlockId, item);
+        } else {
+            item = null;
+        }
 
         final IBlockOverride provider = block instanceof IBlockOverride ? (IBlockOverride) block : DEFAULT_PROVIDER;
 
@@ -276,32 +301,18 @@ public class MMOBlockRegistrar {
         Registry.register(Registry.BLOCK, identifier, block);
     }
 
-    public static class Result {
-
-        @Nullable
-        public final BlockItem item;
-        @Nullable
-        public final RegisteredBlock<SlabBlock> slab;
-        @Nullable
-        public final RegisteredBlock<MMOVerticalSlabBlock> verticalSlab;
-        @Nullable
-        public final RegisteredBlock<StairsBlock> stairs;
-        @Nullable
-        public final RegisteredBlock<WallBlock> wall;
-        @Nullable
-        public final RegisteredBlock<PaneBlock> pane;
-        @Nullable
-        public final RegisteredBlock<FenceBlock> fence;
-        @Nullable
-        public final RegisteredBlock<FenceGateBlock> fenceGate;
-        @Nullable
-        public final RegisteredBlock<DoorBlock> door;
-        @Nullable
-        public final RegisteredBlock<TrapdoorBlock> trapdoor;
-        @Nullable
-        public final RegisteredBlock<PressurePlateBlock> pressurePlate;
-        @Nullable
-        public final RegisteredBlock<AbstractButtonBlock> button;
+    public record Result(@Nullable BlockItem item,
+                         @Nullable RegisteredBlock<SlabBlock> slab,
+                         @Nullable RegisteredBlock<MMOVerticalSlabBlock> verticalSlab,
+                         @Nullable RegisteredBlock<StairsBlock> stairs,
+                         @Nullable RegisteredBlock<WallBlock> wall,
+                         @Nullable RegisteredBlock<PaneBlock> pane,
+                         @Nullable RegisteredBlock<FenceBlock> fence,
+                         @Nullable RegisteredBlock<FenceGateBlock> fenceGate,
+                         @Nullable RegisteredBlock<DoorBlock> door,
+                         @Nullable RegisteredBlock<TrapdoorBlock> trapdoor,
+                         @Nullable RegisteredBlock<PressurePlateBlock> pressurePlate,
+                         @Nullable RegisteredBlock<AbstractButtonBlock> button) {
 
         @ParametersAreNullableByDefault
         public Result(BlockItem item,
@@ -331,11 +342,7 @@ public class MMOBlockRegistrar {
         }
     }
 
-    public static class RegisteredBlock<T extends Block> {
-
-        public final T block;
-        @Nullable
-        public final BlockItem item;
+    public record RegisteredBlock<T extends Block>(T block, @Nullable BlockItem item) {
 
         public RegisteredBlock(T block, @Nullable BlockItem item) {
             this.block = block;
