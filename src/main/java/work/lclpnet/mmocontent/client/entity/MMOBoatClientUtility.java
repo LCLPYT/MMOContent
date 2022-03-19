@@ -3,9 +3,9 @@ package work.lclpnet.mmocontent.client.entity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.render.entity.BoatEntityRenderer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
+import work.lclpnet.mmocontent.client.render.entity.MMOBoatEntityRenderer;
 import work.lclpnet.mmocontent.entity.MMOBoatEntity;
 
 @Environment(EnvType.CLIENT)
@@ -23,7 +23,7 @@ public class MMOBoatClientUtility {
         if (MMOBoatEntity.boatEntityType == null)
             throw new IllegalStateException("MMOBoatEntity should be enabled before enabling it on the client");
 
-        EntityRendererRegistry.register(MMOBoatEntity.boatEntityType, BoatEntityRenderer::new);
+        EntityRendererRegistry.register(MMOBoatEntity.boatEntityType, MMOBoatEntityRenderer::new);
 
         @SuppressWarnings("unchecked")
         MMOClientEntities.EntityFactory<MMOBoatEntity> factory = (type, world) -> new MMOBoatEntity((EntityType<? extends BoatEntity>) type, world);

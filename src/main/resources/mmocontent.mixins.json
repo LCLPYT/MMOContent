@@ -21,6 +21,7 @@
     "common.BoatEntityAccessor",
     "common.MixinAbstractButtonBlock",
     "common.MixinAxeItem",
+    "common.MixinBlockEntityType",
     "common.SignTypeAccessor",
     "common.SoundEventAccessor"
   ]
