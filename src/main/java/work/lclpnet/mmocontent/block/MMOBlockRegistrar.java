@@ -442,7 +442,9 @@ public class MMOBlockRegistrar {
             registerBlockItem(slabId, slabItem);
 
             registeredSlab.set(new RegisteredBlock<>(slabBlock, slabItem));
-        } else {
+        }
+
+        if (verticalSlab != null) {
             final Identifier verticalSlabId = new Identifier(namespace, String.format("%s_vertical_slab", name));
             MMOVerticalSlabBlock verticalSlabBlock = provider.provideVerticalSlab(slabBlock);
             registerBlock(verticalSlabId, verticalSlabBlock);
