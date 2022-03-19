@@ -9,15 +9,19 @@
     "client.MixinBuiltinModelItemRenderer",
     "client.MixinClientPlayNetworkHandler",
     "client.MixinModelLoader",
-    "client.MixinRenderLayers"
+    "client.MixinRenderLayers",
+    "client.MixinTexturedRenderLayers"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
     "common.AbstractButtonBlockAccessor",
+    "common.BlockEntityTypeAccessor",
+    "common.BoatEntityAccessor",
     "common.MixinAbstractButtonBlock",
     "common.MixinAxeItem",
+    "common.SignTypeAccessor",
     "common.SoundEventAccessor"
   ]
 }
