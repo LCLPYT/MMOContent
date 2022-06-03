@@ -2,7 +2,6 @@ package work.lclpnet.mmocontent.networking;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -76,28 +75,18 @@ public class MMONetworking {
         return ServerPlayNetworking.createS2CPacket(channelName, buf);
     }
 
-    @Environment(EnvType.CLIENT)
-    public static void sendPacketToServer(MCPacket packet) {
+    public static Packet<?> createMMOSpawnPacket(Entity entity) {
         try {
-            PacketByteBuf buf = toPacketBuffer(packet);
-            ClientPlayNetworking.send(packet.getIdentifier(), buf);
+            return createVanillaS2CPacket(new MMOEntitySpawnS2CPacket(entity));
         } catch (IOException e) {
-            LOGGER.error(e);
+            throw new IllegalStateException("Failed to create spawn packet", e);
         }
     }
 
     @Nonnull
-    private static PacketByteBuf toPacketBuffer(MCPacket packet) throws IOException {
+    public static PacketByteBuf toPacketBuffer(MCPacket packet) throws IOException {
         PacketByteBuf buf = PacketByteBufs.create();
         packet.encodeTo(buf);
         return buf;
-    }
-
-    public static Packet<?> createMMOSpawnPacket(Entity entity) {
-        try {
-            return MMONetworking.createVanillaS2CPacket(new MMOEntitySpawnS2CPacket(entity));
-        } catch (IOException e) {
-            throw new IllegalStateException("Failed to create spawn packet", e);
-        }
     }
 }
