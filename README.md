@@ -165,5 +165,5 @@ After registering the block, you must create a blockstate and two model files:
 }
 ```
 Where `modid` is the id of your mod, and `custom_stone` is your block name.
-The parent model `modid:block/vertical_slab` has to created too, but you can copy it [directly from MMOContent](https://github.com/LCLPYT/MMOContent/blob/main/src/main/resources/assets/mmocontent/model/block/vertical_slab.json) (put it in your `model/block` directory).<br>
+The parent model `modid:block/vertical_slab` has to be created too, but you can copy it [directly from MMOContent](https://github.com/LCLPYT/MMOContent/blob/main/src/main/resources/assets/mmocontent/model/block/vertical_slab.json) (put it in your `model/block` directory).<br>
 Referencing it directly (`"parent": "mmocontent:block/vertical_slab"`) is a bad idea, since it is not guaranteed that MMOContent is loaded before your mod, which can lead to errors.
