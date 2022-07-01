@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -63,6 +64,11 @@ public class MMONetworking {
 
         // if the entity is a player, the packet will not be sent to the player, since players do not track themselves.
         if (living instanceof ServerPlayerEntity) MMONetworking.sendPacketTo(packet, (ServerPlayerEntity) living);
+    }
+
+    public static void sendToAll(MinecraftServer server, MCPacket packet) {
+        Objects.requireNonNull(packet);
+        PlayerLookup.all(server).forEach(p -> sendPacketTo(packet, p));
     }
 
     public static Packet<?> createVanillaS2CPacket(MCPacket packet) throws IOException {

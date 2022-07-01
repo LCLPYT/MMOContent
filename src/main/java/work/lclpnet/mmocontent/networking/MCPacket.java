@@ -3,6 +3,7 @@ package work.lclpnet.mmocontent.networking;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import work.lclpnet.mmocontent.client.networking.MMOClientNetworking;
@@ -25,6 +26,10 @@ public abstract class MCPacket {
 
     public void sendTo(ServerPlayerEntity player) {
         MMONetworking.sendPacketTo(this, player);
+    }
+
+    public void sendToAll(MinecraftServer server) {
+        MMONetworking.sendToAll(server, this);
     }
 
     @Environment(EnvType.CLIENT)
