@@ -167,3 +167,64 @@ After registering the block, you must create a blockstate and two model files:
 Where `modid` is the id of your mod, and `custom_stone` is your block name.
 The parent model `modid:block/vertical_slab` has to be created too, but you can copy it [directly from MMOContent](https://github.com/LCLPYT/MMOContent/blob/main/src/main/resources/assets/mmocontent/model/block/vertical_slab.json) (put it in your `model/block` directory).<br>
 Referencing it directly (`"parent": "mmocontent:block/vertical_slab"`) is a bad idea, since it is not guaranteed that MMOContent is loaded before your mod, which can lead to errors.
+
+### Commands
+To register commands, you can extend `AbstractCommand`:
+```java
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
+
+public class EchoCommand extends AbstractCommand {
+
+    public EchoCommand() {
+        super("echo");
+        // optionally add command aliases here
+        // addAlias("loopback", "another_alias", ...);
+    }
+
+    @Override
+    protected LiteralArgumentBuilder<ServerCommandSource> build(LiteralArgumentBuilder<ServerCommandSource> builder) {
+        return builder
+                .then(CommandManager.argument("text", StringArgumentType.greedyString())
+                        .executes(EchoCommand::echo));
+    }
+
+    private static int echo(CommandContext<ServerCommandSource> ctx) {
+        final String text = StringArgumentType.getString(ctx, "text");
+        ctx.getSource().sendFeedback(new LiteralText(text), false);
+        return 0;
+    }
+}
+```
+Pass the command name to the super constructor.
+The `build()` method transforms a given root brigadier `LiteralArgumentBuilder` and populates the command tree.
+From there on, you apply default Mojang brigadier library logic.
+
+To register your commands, you can adapt to this pattern:
+```java
+import com.mojang.brigadier.CommandDispatcher;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.server.command.ServerCommandSource;
+
+public class MyCommands {
+
+    private static volatile boolean listenerRegistered = false;
+
+    public static void register() {
+        if (listenerRegistered) return;
+        listenerRegistered = true;
+
+        CommandRegistrationCallback.EVENT.register(MyCommands::register);
+    }
+
+    private static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
+        // register new commands here
+        new EchoCommand().register(dispatcher);
+    }
+}
+```
+Remember to call `MyCommands.register()` in your `ModInitializer#onInitialize`.
