@@ -228,3 +228,70 @@ public class MyCommands {
 }
 ```
 Remember to call `MyCommands.register()` in your `ModInitializer#onInitialize`.
+
+#### Custom Argument Types
+To register custom argument types, you may use MMOArgumentTypes.register():
+```java
+MMOArgumentTypes.register(new Identifier("modid", "my_argument_type"), MyArgumentType.class, serializer);
+```
+Where `serializer` is an ArgumentSerializer that serializes your argument type. For simple argument types, you can use
+`ConstantArgumentSerializer`. For more information, consult the [Fabric wiki](https://fabricmc.net/wiki/tutorial:commands#custom_argument_types).
+
+### Config
+MMOContent provides `ConfigHelper` to aid you creating configurations.
+The `ConfigHelper` mainly provides two methods: `load()` and `save()` which are able to JSON deserialize / serialize 
+POJOs using the [GSON](https://github.com/google/gson) library.
+
+You can adapt such a singleton-like pattern:
+```java
+public class MyConfig {
+    
+    public static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("modid").resolve("config.json");
+    
+    private static MyConfig config = null;
+
+    /* Prevent instantiation with new MyConfig() */
+    protected MyConfig() {}
+
+    /* actual configuration properties; all types supported by GSON are allowed */
+    public boolean someBoolean = false;
+    public int someInt = 0;
+    public String someString = "";
+    public UIConfig ui = new UIConfig();
+    // ...
+
+    /* static getters and setters */
+    public static boolean shouldRenderUi() {
+        return config.ui.enableRender;
+    }
+
+    public static void shouldRenderUi(boolean enable) {
+        config.ui.enableRender = enable;
+
+        onChange();  // notify config change
+        save();      // save config asynchronously
+    }
+
+    /* optional update callback method (useful for reacting to general config changes) */
+    public static void onChange() {
+        // implement behaviour here
+    }
+
+    /* IO logic boilerplate */
+    public static CompletableFuture<Void> load() {
+        return ConfigHelper.load(CONFIG_PATH, MyConfig.class, MyConfig::new).thenAccept(conf -> {
+            config = conf;
+            onChange();
+        });
+    }
+
+    public static CompletableFuture<Void> save() {
+        return ConfigHelper.save(CONFIG_PATH, config);
+    }
+
+    /* optional way to define sub-configurations (deeper JSON paths; e.g. {"ui":{"enableRender":true}}) */
+    public static class UIConfig {
+        public boolean enableRender = true;
+    }
+}
+```
