@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import net.minecraft.util.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,7 +40,7 @@ public class ConfigHelper {
             }
 
             return config;
-        });
+        }, Util.getIoWorkerExecutor());
     }
 
     public static <T> CompletableFuture<Void> save(Path path, T config) {
@@ -62,7 +63,7 @@ public class ConfigHelper {
             } catch (Exception e) {
                 logger.error("Could not write config file", e);
             }
-        });
+        }, Util.getIoWorkerExecutor());
     }
 
     public static void dispatchHandledSave(Path path, Object obj) {
