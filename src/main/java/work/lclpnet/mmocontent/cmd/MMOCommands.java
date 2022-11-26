@@ -5,7 +5,7 @@ import com.mojang.brigadier.exceptions.DynamicNCommandExceptionType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -30,10 +30,10 @@ public class MMOCommands {
     }
 
     public static DynamicCommandExceptionType dynamicError(String key) {
-        return new DynamicCommandExceptionType(arg -> new TranslatableText(key, arg));
+        return new DynamicCommandExceptionType(arg -> Text.translatable(key, arg));
     }
 
     public static DynamicNCommandExceptionType dynamicNError(String key) {
-        return new DynamicNCommandExceptionType(args -> new TranslatableText(key, args));
+        return new DynamicNCommandExceptionType(args -> Text.translatable(key, args));
     }
 }
