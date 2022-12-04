@@ -31,7 +31,7 @@ public class MMOBoatEntityRenderer extends EntityRenderer<MMOBoatEntity> {
     public MMOBoatEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
         this.shadowRadius = 0.8f;
-        model = new BoatEntityModel(context.getPart(EntityModelLayers.createBoat(BoatEntity.Type.OAK)));
+        model = new BoatEntityModel(context.getPart(EntityModelLayers.createBoat(BoatEntity.Type.OAK)), false);
     }
 
     @Override

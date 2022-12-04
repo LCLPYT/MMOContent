@@ -55,7 +55,7 @@ public abstract class MixinArmorFeatureRenderer {
         model.setAttributes(bipedEntityModel);
 
         this.setVisible(bipedEntityModel, equipmentSlot);
-        boolean bl = this.usesSecondLayer(equipmentSlot);
+        boolean bl = this.usesInnerModel(equipmentSlot);
         boolean bl2 = itemStack.hasGlint();
         if (armorItem instanceof DyeableArmorItem) {
             int j = ((DyeableArmorItem)armorItem).getColor(itemStack);
@@ -73,7 +73,7 @@ public abstract class MixinArmorFeatureRenderer {
     protected abstract void setVisible(BipedEntityModel<?> bipedModel, EquipmentSlot slot);
 
     @Shadow
-    protected abstract boolean usesSecondLayer(EquipmentSlot slot);
+    protected abstract boolean usesInnerModel(EquipmentSlot slot);
 
     protected void renderArmorPartsCustom(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, boolean bl, BipedEntityModel<LivingEntity> bipedEntityModel, float f, float g, float h, Identifier armorResource) {
         VertexConsumer vertexConsumer = ItemRenderer.getArmorGlintConsumer(vertexConsumerProvider, RenderLayer.getArmorCutoutNoCull(armorResource), false, bl);
@@ -96,7 +96,7 @@ public abstract class MixinArmorFeatureRenderer {
             texture = texture.substring(idx + 1);
         }
 
-        String s = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesSecondLayer(slot) ? 2 : 1), type == null ? "" : String.format("_%s", type));
+        String s = String.format("%s:textures/models/armor/%s_layer_%d%s.png", domain, texture, (usesInnerModel(slot) ? 2 : 1), type == null ? "" : String.format("_%s", type));
         return ARMOR_TEXTURE_RES_MAP.computeIfAbsent(s, Identifier::new);
     }
 }

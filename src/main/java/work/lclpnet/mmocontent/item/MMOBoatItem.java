@@ -23,11 +23,11 @@ import java.util.function.Predicate;
 
 public class MMOBoatItem extends BoatItem {
 
-    private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::collides);
+    private static final Predicate<Entity> RIDERS = EntityPredicates.EXCEPT_SPECTATOR.and(Entity::canHit);
     protected final MMOBoatType type;
 
     public MMOBoatItem(MMOBoatType type, Settings settings) {
-        super(BoatEntity.Type.OAK, settings);
+        super(false, BoatEntity.Type.OAK, settings);
         this.type = Objects.requireNonNull(type);
     }
 
