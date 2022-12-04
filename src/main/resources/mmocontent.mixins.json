@@ -17,6 +17,7 @@
   },
   "mixins": [
     "common.AbstractButtonBlockAccessor",
+    "common.ArgumentTypesAccessor",
     "common.BlockEntityTypeAccessor",
     "common.BoatEntityAccessor",
     "common.MixinAbstractButtonBlock",
